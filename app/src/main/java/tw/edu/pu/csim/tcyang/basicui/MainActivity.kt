@@ -29,6 +29,7 @@ import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -163,9 +164,20 @@ fun Main(modifier: Modifier = Modifier) {
         val context = LocalContext.current
         var mper: MediaPlayer? by remember { mutableStateOf(null) }
 
+        DisposableEffect(Unit) {
+            onDispose {
+                mper?.release()
+                mper = null
+            }
+        }
+
         Row {
             Button(
                 onClick = {
+                    mper?.release()
+                    mper = null
+                    mper = MediaPlayer.create(context, R.raw.tcyang) //設定音樂
+                    mper?.start()
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.33f)
@@ -180,25 +192,74 @@ fun Main(modifier: Modifier = Modifier) {
                 )
             }
 
-            Spacer(modifier = Modifier.size(10.dp))
+            Button(
 
-            Button(onClick = {
+                onClick = {
 
-            }) {
+                    mper?.release()
+                    mper = null
+                    mper = MediaPlayer.create(context, R.raw.fly)
+                    mper?.start()
+                },
 
-                Text(text = "展翅飛翔")
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .fillMaxHeight(0.4f),
+                colors = buttonColors(Color.Blue)
+
+            ) {
+
+                Text(text = "展翅飛翔", color = Color.White)
+                Image(
+                    painterResource(id = R.drawable.fly),
+                    contentDescription = "fly icon"
+                )
 
             }
 
-            Spacer(modifier = Modifier.size(10.dp))
+            Button(
 
-            Button(onClick = {
+                onClick = {
+                    val activity = context as? Activity
+                    activity?.finish()
+                },
 
-            }) {
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00BFFF)),
+                shape = CutCornerShape(10),
+                border = BorderStroke(1.dp, Color.Blue),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 10.dp)
 
-                Text(text = "結束App")
+            ) {
+
+                Text(
+
+                    text = "結束App"
+
+                )
 
             }
+        }
+        Row{
+            var flag by remember { mutableStateOf(false) }
+
+            Button(onClick = {
+                flag = !flag
+            }) {
+                if (flag) {
+                    Image(
+                        painter = painterResource(id = Animals[1]),
+                        contentDescription = "可愛動物",
+                        modifier = Modifier.size(60.dp)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = Animals[2]),
+                        contentDescription = "可愛動物",
+                        modifier = Modifier.size(60.dp)
+                    )
+                }
+            }
+
         }
     }
 }
