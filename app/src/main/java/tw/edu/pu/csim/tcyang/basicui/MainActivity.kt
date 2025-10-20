@@ -108,7 +108,7 @@ fun Main(modifier: Modifier = Modifier) {
                     .clip(CircleShape)
                     .background(Color.Yellow),
                 alpha = 0.6f,
-                )
+            )
 
             Image(
                 painter = painterResource(id = R.drawable.compose),
@@ -146,13 +146,38 @@ fun Main(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.size(10.dp))
 
         Row{
+            var flag by remember { mutableStateOf(false) }
 
             Button(onClick = {
-
+                flag = true
             }) {
+                if (flag) {
+                    Text("test: button clicked!")
+                } else {
+                    Text("button")
+                }
+            }
 
-                Text(text = "歡迎修課")
+        }
 
+        val context = LocalContext.current
+        var mper: MediaPlayer? by remember { mutableStateOf(null) }
+
+        Row {
+            Button(
+                onClick = {
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.33f)
+                    .fillMaxHeight(0.8f),
+                colors = buttonColors(Color.Green)
+            ) {
+                Text(text = "歡迎", color = Color.Blue)
+                Text(text = "修課", color = Color.Red)
+                Image(
+                    painterResource(id = R.drawable.teacher),
+                    contentDescription = "teacher icon"
+                )
             }
 
             Spacer(modifier = Modifier.size(10.dp))
@@ -174,20 +199,6 @@ fun Main(modifier: Modifier = Modifier) {
                 Text(text = "結束App")
 
             }
-
         }
-
-        var flag by remember { mutableStateOf(false) }
-
-        Button(onClick = {
-            flag = true
-        }) {
-            if (flag) {
-                Text("test: button clicked!")
-            } else {
-                Text("button")
-            }
-        }
-
     }
 }
